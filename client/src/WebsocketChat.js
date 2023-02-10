@@ -1,4 +1,7 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react';
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
+import { Grid, TextField } from '@mui/material';
 
 const WebsocketChat = () => {
     const socket = useRef();
@@ -20,7 +23,7 @@ const WebsocketChat = () => {
         }
         socket.current.onmessage = (event) => {
             const message = JSON.parse(event.data);
-            setMessages(prev => [message, ...prev]);
+            setMessages(prev => [...prev, message]);
         }
         socket.current.onclose = () => {
             console.log('Connection was closed');
@@ -59,15 +62,6 @@ const WebsocketChat = () => {
 
     return (
         <div className='center'>
-                <div className='form'>
-                    <input
-                        type="text"
-                        placeholder='Input message'
-                        value={value}
-                        onChange={(event) => setValue(event.target.value)}
-                    />
-                    <button onClick={sendMessage}>Send</button>
-                </div>
                 <div className='messages'>
                     {messages.map((message) => (
                         <div>
@@ -79,6 +73,35 @@ const WebsocketChat = () => {
                         </div>
                     ))}
                 </div>
+                <Grid
+                    className="form"
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={2}
+                >
+                    <Grid item xs={3}>
+                        <TextField
+                            id="outlined-basic" 
+                            size="small"
+                            label="Message"
+                            variant="outlined" 
+                            placeholder='Input message'
+                            value={value}
+                            onChange={(event) => setValue(event.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={1}>
+                        <Button 
+                            variant="contained"
+                            endIcon={<SendIcon />}
+                            onClick={sendMessage}
+                        >
+                        Send
+                        </Button>
+                    </Grid>
+                </Grid>
             </div>
     )
 }
